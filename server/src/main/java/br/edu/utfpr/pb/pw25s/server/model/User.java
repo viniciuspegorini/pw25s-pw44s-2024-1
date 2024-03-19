@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.pw25s.server.model;
 
+import br.edu.utfpr.pb.pw25s.server.annotation.UniqueUsername;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @UniqueUsername
+    @NotNull(message = "{br.edu.pb.utfpr.pw25s.server.user.username.NotNull}")
     @Size(min = 4, max = 255)
     private String username;
 
@@ -30,6 +32,7 @@ public class User {
 
     @NotNull
     @Size(min = 6)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$",
+    message = "{br.edu.pb.utfpr.pw25s.server.user.password.Pattern}")
     private String password;
 }
