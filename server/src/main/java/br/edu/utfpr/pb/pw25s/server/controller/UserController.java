@@ -32,22 +32,4 @@ public class UserController {
         return GenericResponse.builder().message("User saved.").build();
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handlerValidationException(
-            MethodArgumentNotValidException exception,
-            HttpServletRequest request) {
-        Map<String, String> validationErrors = new HashMap<>();
-        for(FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
-            validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
-        }
-
-        return ApiError.builder()
-                .status(400)
-                .message("Validation error")
-                .url(request.getServletPath())
-                .validationErrors(validationErrors)
-                .build();
-    }
-
 }
