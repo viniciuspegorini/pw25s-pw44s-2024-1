@@ -68,6 +68,11 @@ public class WebSecurity {
                                 authenticationManager,
                                 authService)
                 )
+                .addFilter(
+                        new JWTAuthorizationFilter(
+                                authenticationManager,
+                                authService)
+                )
                 .sessionManagement(sessionManagement ->
                     sessionManagement.sessionCreationPolicy(
                             SessionCreationPolicy.STATELESS)
