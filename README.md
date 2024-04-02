@@ -42,6 +42,11 @@ O conteúdo do projeto é uma introdução sobre os *frameworks* **Spring, Sprin
 
 Neste projeto, os alunos terão a oportunidade de aplicar seus conhecimentos em desenvolvimento web para criar uma aplicação web de comércio eletrônico. O objetivo é desenvolver uma plataforma de compras online funcional. Os alunos serão desafiados a implementar uma variedade de recursos essenciais para um site de *e-commerce*, incluindo catálogo de produtos, página individual de produtos, carrinho de compras, processamento de pedidos, entre outros. A solução deverá ser dividida entre uma API Rest desenvolvida com o *framework* Spring e um cliente desenvolvido com o *framework* React.
 
+
+## Datas:
+##### Primeira entrega: 22/04/2024 e 24/04/2024
+##### Entrega final: 24/06/2024	 e 26/06/2024
+
 #### Requisitos mínimos:
 
 1. A aplicação deverá conter uma página para listar todos os produtos, utilizar como exemplo os sites de compra disponíveis na internet, a lista de produtos deve conter o nome, valor e a imagem do produto (pode ser uma URL externa).
