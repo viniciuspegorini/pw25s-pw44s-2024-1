@@ -1,34 +1,31 @@
 package br.edu.utfpr.pb.pw25s.server.controller;
 
 import br.edu.utfpr.pb.pw25s.server.dto.CategoryDto;
+import br.edu.utfpr.pb.pw25s.server.dto.ProductDto;
 import br.edu.utfpr.pb.pw25s.server.model.Category;
+import br.edu.utfpr.pb.pw25s.server.model.Product;
 import br.edu.utfpr.pb.pw25s.server.service.ICategoryService;
 import br.edu.utfpr.pb.pw25s.server.service.ICrudService;
-import jakarta.validation.Valid;
+import br.edu.utfpr.pb.pw25s.server.service.IProductService;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("categories")
-public class CategoryController extends CrudController<Category, CategoryDto, Long>{
+@RequestMapping("products")
+public class ProductController extends CrudController<Product, ProductDto, Long>{
 
-    private final ICategoryService service;
+    private final IProductService service;
     private final ModelMapper modelMapper;
 
-    public CategoryController(ICategoryService service, ModelMapper modelMapper) {
-        super(Category.class, CategoryDto.class);
+    public ProductController(IProductService service, ModelMapper modelMapper) {
+        super(Product.class, ProductDto.class);
         this.service = service;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    protected ICrudService<Category, Long> getService() {
+    protected ICrudService<Product, Long> getService() {
         return service;
     }
 
