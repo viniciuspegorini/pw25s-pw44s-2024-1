@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { ChangeEvent, useState } from 'react'
 
 export function UserSignupPage() {
@@ -19,7 +20,24 @@ export function UserSignupPage() {
 
 
     const onClickSignup = () => {
-        console.log(form.password);
+        const user = {
+            displayName: form.displayName,
+            username: form.username,
+            password: form.password
+        }
+
+        console.log(1)
+        axios.post('http://localhost:8025/users', user)
+            .then((response) => {
+                console.log(2)
+                console.log(response.data.message)
+            })
+            .catch((error) => {
+                console.log(3)
+                console.log(error)
+            })
+        console.log(4)
+
     }
 
     return (
