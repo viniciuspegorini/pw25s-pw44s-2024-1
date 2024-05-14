@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ChangeEvent, useState } from "react";
+import { Link } from "react-router-dom";
 
 export function LoginPage() {
   const [form, setForm] = useState({
@@ -67,6 +68,9 @@ export function LoginPage() {
           <button className="btn btn-primary" onClick={onClickLogin}>
             Login
           </button>
+        </div>
+        <div className="text-center">
+            <Link to="/signup">Cadastre-se</Link>
         </div>
       </div>
     </>
