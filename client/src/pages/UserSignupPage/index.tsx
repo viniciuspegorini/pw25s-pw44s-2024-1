@@ -1,7 +1,9 @@
-import axios from "axios";
 import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
-import { Input } from "../../components/Input";
+import { Link, useNavigate } from "react-router-dom";
+import { Input } from "@/components/Input";
+import { api } from "@/lib/axios";
+import AuthService from "../../service/AuthService";
+import { IUserSignup } from "../../commons/interfaces";
 
 export function UserSignupPage() {
   const [form, setForm] = useState({
@@ -9,12 +11,15 @@ export function UserSignupPage() {
     username: "",
     password: "",
   });
-
   const [errors, setErrors] = useState({
     displayName: "",
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const [pendingApiCall, setPendingApiCall] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const [apiSuccess, setApiSuccess] = useState("");
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -26,23 +31,30 @@ export function UserSignupPage() {
     });
   };
 
-  const onClickSignup = () => {
-    const user = {
+  const onClickSignup = async () => {
+    setPendingApiCall(true);
+
+    const user: IUserSignup = {
       displayName: form.displayName,
       username: form.username,
       password: form.password,
     };
 
-    axios
-      .post("http://localhost:8025/users", user)
-      .then((response) => {
-        console.log(response.data.message);
-      })
-      .catch((error) => {
-        if (error.response.data.validationErrors) {
-          setErrors(error.response.data.validationErrors);
-        }
-      });
+    const response = await AuthService.signup(user);
+    if (response.status === 200 || response.status === 201) {
+      setApiSuccess("Cadastro realizado com sucesso!");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+
+    } else {
+      setApiError("Erro ao cadastrar o usuário!");
+      if (response.data.validationErrors) {
+        setErrors(response.data.validationErrors);
+      }
+    }
+
+    setPendingApiCall(false);
   };
 
   return (
@@ -66,37 +78,51 @@ export function UserSignupPage() {
           />
         </div>
         <div className="col-12 mb-3">
-          <label htmlFor="username">Informe seu usuário:</label>
-          <input
-            type="text"
+          <Input
             id="username"
             name="username"
+            label="Informe seu usuário:"
+            type="text"
             value={form.username}
             placeholder="Informe seu usuário"
-            className={"form-control" + (errors?.username ? " is-invalid" : "")}
+            hasError={errors.username ? true : false}
+            error={errors.username}
             onChange={onChange}
+            className="form-control"
           />
-          {errors.username && (
-            <div className="invalid-feedback">{errors.username}</div>
-          )}
         </div>
         <div className="col-12 mb-3">
-          <label htmlFor="password">Informe sua senha:</label>
-          <input
-            type="password"
+          <Input
             id="password"
             name="password"
+            label="Informe a sua senha:"
+            type="text"
             value={form.password}
-            placeholder="******"
-            className={"form-control" + (errors.password && " is-invalid")}
+            placeholder="Informe a sua senha"
+            hasError={errors.password ? true : false}
+            error={errors.password}
             onChange={onChange}
+            className="form-control"
           />
-          {errors.password && (
-            <div className="invalid-feedback">{errors.password}</div>
-          )}
         </div>
+        {apiError && (
+          <div className="alert alert-danger text-center">{apiError}</div>
+        )}
+        {apiSuccess && (
+          <div className="alert alert-success text-center">{apiSuccess}</div>
+        )}
         <div className="text-center">
-          <button className="btn btn-primary" onClick={onClickSignup}>
+          <button
+            disabled={pendingApiCall}
+            className="btn btn-primary"
+            onClick={onClickSignup}
+          >
+            {pendingApiCall && (
+              <div
+                className="spinner-border spinner-border-sm text-light-spinner mr-sm-1"
+                role="status"
+              ></div>
+            )}
             Cadastrar
           </button>
         </div>

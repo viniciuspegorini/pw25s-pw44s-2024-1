@@ -64,8 +64,8 @@ public class WebSecurity {
                 .requestMatchers(HttpMethod.POST, "/users/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/error/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                // .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
+                // .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
 
                 .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
