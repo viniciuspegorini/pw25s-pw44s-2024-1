@@ -1,12 +1,17 @@
-import axios from "axios";
+import { IUserLogin } from "@/commons/interfaces";
+import AuthService from "@/service/AuthService";
 import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function LoginPage() {
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
+  const [pendingApiCall, setPendingApiCall] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const [apiSuccess, setApiSuccess] = useState("");
+  const navigate = useNavigate();
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -18,28 +23,29 @@ export function LoginPage() {
     });
   };
 
-  const onClickLogin = () => {
-    const login = {
+  const onClickLogin = async () => {
+    const login: IUserLogin = {
       username: form.username,
       password: form.password,
     };
 
-    axios
-      .post("http://localhost:8025/login", login)
-      .then((response) => {
-        console.log(response.data.message);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const response = await AuthService.login(login);
+    if (response.status === 200 || response.status === 201) {
+      setApiSuccess("Cadastro realizado com sucesso!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
+    } else {
+      setApiError("Erro ao cadastrar o usuário!");
+    }
+
+    setPendingApiCall(false);
   };
 
   return (
     <>
       <div className="container">
-        <h1 className="text-center">
-          Login
-        </h1>
+        <h1 className="text-center">Login</h1>
         <div className="col-12 mb-3">
           <label htmlFor="username">Informe seu usuário:</label>
           <input
@@ -64,13 +70,29 @@ export function LoginPage() {
             onChange={onChange}
           />
         </div>
+        {apiError && (
+          <div className="alert alert-danger text-center">{apiError}</div>
+        )}
+        {apiSuccess && (
+          <div className="alert alert-success text-center">{apiSuccess}</div>
+        )}
         <div className="text-center">
-          <button className="btn btn-primary" onClick={onClickLogin}>
-            Login
+          <button
+            disabled={pendingApiCall}
+            className="btn btn-primary"
+            onClick={onClickLogin}
+          >
+            {pendingApiCall && (
+              <div
+                className="spinner-border spinner-border-sm text-light-spinner mr-sm-1"
+                role="status"
+              ></div>
+            )}
+            Cadastrar
           </button>
         </div>
         <div className="text-center">
-            <Link to="/signup">Cadastre-se</Link>
+          <Link to="/signup">Cadastre-se</Link>
         </div>
       </div>
     </>
