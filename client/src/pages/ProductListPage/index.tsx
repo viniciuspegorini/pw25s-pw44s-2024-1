@@ -25,12 +25,15 @@ export function ProductListPage() {
 
   const onRemove = async (id: number) => {
     const response = await remove(id);
-    if (response.status === 204) {
+    if (response.status === 204 || response.status === 200) {
       setShowDeleteMessage(true);
 
-      data.filter((product) => {
-        return product.id !== id;
-      });
+      // loadData();
+      setData(
+        data.filter((product) => {
+          return product.id !== id;
+        })
+      );
 
       setTimeout(() => {
         setShowDeleteMessage(false);

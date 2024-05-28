@@ -67,7 +67,7 @@ public class WebSecurity {
                 // .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
                 // .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
 
-                .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority("ADMIN")
+                //.requestMatchers(HttpMethod.POST, "/products/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
         );
 
